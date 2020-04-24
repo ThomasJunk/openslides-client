@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 
 import { AgendaItemRepositoryService, AgendaListTitle } from '../agenda/agenda-item-repository.service';
 import { HttpService } from 'app/core/core-services/http.service';
+import { DEFAULT_FIELDSET, Fieldsets } from 'app/core/core-services/model-request-builder.service';
 import { OperatorService } from 'app/core/core-services/operator.service';
 import { DiffLinesInParagraph, DiffService } from 'app/core/ui-services/diff.service';
 import { OrganisationSettingsService } from 'app/core/ui-services/organisation-settings.service';
@@ -106,6 +107,26 @@ export class MotionRepositoryService extends BaseIsAgendaItemAndListOfSpeakersCo
         config.get<number>('motions_line_length').subscribe(lineLength => {
             this.motionLineLength = lineLength;
         });
+    }
+
+    public getFieldsets(): Fieldsets<Motion> {
+        const listFields: (keyof Motion)[] = [
+            'sort_child_ids',
+            'sort_parent_id',
+            'sort_weight',
+            'title',
+            'category_weight',
+            'created',
+            'last_modified',
+            'number',
+            'sequential_number'
+        ];
+        return {
+            [DEFAULT_FIELDSET]: listFields.concat([
+                /*todo*/
+            ]),
+            list: listFields
+        };
     }
 
     public getTitle = (viewMotion: ViewMotion) => {
